@@ -1,5 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
+
+
+   <!DOCTYPE html>
+<html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -23,12 +25,7 @@
       height: 100vh;
       width: 100vw;
     }
-    #canvas-container {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      inset: 0;
-    }
+    #canvas-container { width: 100%; height: 100%; position: absolute; inset: 0; }
     .hud {
       position: absolute;
       bottom: 24px;
@@ -52,6 +49,8 @@
       align-items: center;
       font-size: 13px;
       color: var(--muted);
+      gap: 8px;
+      flex-wrap: wrap;
     }
     .status-badge {
       display: inline-flex;
@@ -64,28 +63,20 @@
       color: #e5e7eb;
     }
     .dot {
-      width: 8px;
-      height: 8px;
+      width: 8px; height: 8px;
       border-radius: 50%;
       background: #f59e0b;
+      transition: background 0.2s;
     }
     .dot.ready { background: #10b981; }
     .dot.speaking { background: #e11d48; box-shadow: 0 0 10px #e11d48; }
     .dot.listening { background: #3b82f6; box-shadow: 0 0 10px #3b82f6; animation: pulse 1s infinite alternate; }
+    .dot.error { background: #ef4444; }
     @keyframes pulse {
       from { transform: scale(0.9); opacity: 0.7; }
       to { transform: scale(1.3); opacity: 1; }
     }
-    .mic-active {
-      background: #2563eb !important;
-      color: white !important;
-      animation: pulse 1s infinite alternate;
-    }
-    .input-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .input-row { display: flex; align-items: center; gap: 10px; }
     textarea {
       flex: 1;
       background: rgba(0, 0, 0, 0.35);
@@ -100,15 +91,8 @@
       outline: none;
       transition: border-color 0.2s;
     }
-    textarea:focus {
-      border-color: var(--accent);
-    }
-    .btn-col {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: 8px;
-    }
+    textarea:focus { border-color: var(--accent); }
+    .btn-col { display: flex; flex-direction: row; align-items: center; gap: 8px; }
     button.round-btn {
       width: 46px !important;
       height: 46px !important;
@@ -119,10 +103,7 @@
       justify-content: center;
       flex-shrink: 0;
     }
-    .round-btn svg {
-      width: 20px;
-      height: 20px;
-    }
+    .round-btn svg { width: 20px; height: 20px; }
     button {
       background: var(--accent);
       color: white;
@@ -145,33 +126,14 @@
       height: 30px;
       padding: 0 12px;
     }
-    button.secondary:hover:not(:disabled) {
-      background: rgba(255, 255, 255, 0.16);
-    }
-    .controls-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 12px;
-      color: var(--muted);
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .cam-buttons {
-      display: flex;
-      gap: 6px;
-    }
-    label.toggle {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      user-select: none;
+    button.secondary:hover:not(:disabled) { background: rgba(255, 255, 255, 0.16); }
+    button:focus-visible, textarea:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
     }
     .speech-bubble {
       position: absolute;
-      top: 0;
-      left: 0;
+      top: 0; left: 0;
       max-width: min(320px, 40vw);
       background: var(--panel);
       backdrop-filter: blur(16px);
@@ -181,7 +143,6 @@
       border-radius: 16px;
       font-size: 14px;
       line-height: 1.5;
-      font-weight: 400;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
       z-index: 10;
       opacity: 0;
@@ -189,10 +150,7 @@
       transition: opacity 0.22s ease;
       text-align: left;
     }
-    .speech-bubble.visible {
-      opacity: 1;
-      pointer-events: auto;
-    }
+    .speech-bubble.visible { opacity: 1; pointer-events: auto; }
     .speech-bubble::after {
       content: '';
       position: absolute;
@@ -204,8 +162,7 @@
     }
     .cam-pad {
       position: absolute;
-      left: 20px;
-      top: 50%;
+      left: 20px; top: 50%;
       transform: translateY(-50%);
       background: var(--panel);
       backdrop-filter: blur(16px);
@@ -219,8 +176,7 @@
       box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
     }
     .cam-pad button {
-      width: 34px;
-      height: 34px;
+      width: 34px; height: 34px;
       padding: 0;
       border-radius: 8px;
       background: rgba(255, 255, 255, 0.08);
@@ -230,9 +186,7 @@
       align-items: center;
       justify-content: center;
     }
-    .cam-pad button:hover {
-      background: rgba(255, 255, 255, 0.18);
-    }
+    .cam-pad button:hover { background: rgba(255, 255, 255, 0.18); }
     .cam-pad .cam-divider {
       grid-column: 1 / -1;
       height: 1px;
@@ -241,8 +195,7 @@
     }
     .webcam-pip {
       position: absolute;
-      top: 20px;
-      left: 20px;
+      top: 20px; left: 20px;
       width: 150px;
       border-radius: 14px;
       overflow: hidden;
@@ -268,60 +221,14 @@
       gap: 6px;
     }
     .webcam-dot {
-      width: 7px;
-      height: 7px;
+      width: 7px; height: 7px;
       border-radius: 50%;
       background: #10b981;
       flex-shrink: 0;
     }
-    .webcam-dot.recording {
-      background: #3b82f6;
-      box-shadow: 0 0 8px #3b82f6;
-    }
-    .floating-cam-bar {
-      position: absolute;
-      left: 24px;
-      top: 45%;
-      transform: translateY(-50%);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      z-index: 10;
-    }
-    .cam-fab {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--panel);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 10px 14px;
-      border-radius: 12px;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.15s, border-color 0.15s, transform 0.1s;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-      height: auto;
-    }
-    .cam-fab:hover {
-      background: rgba(38, 43, 60, 0.95);
-      border-color: rgba(255, 255, 255, 0.28);
-      transform: translateX(2px);
-    }
-    .cam-fab.active {
-      border-color: var(--accent);
-      background: rgba(225, 29, 72, 0.18);
-    }
-    .cam-fab svg {
-      width: 18px;
-      height: 18px;
-      flex-shrink: 0;
-    }
+    .webcam-dot.recording { background: #3b82f6; box-shadow: 0 0 8px #3b82f6; }
+    .webcam-dot.off { background: #6b7280; box-shadow: none; }
   </style>
-
-  <!-- Three.js & GLTFLoader via CDN importmap -->
   <script type="importmap">
     {
       "imports": {
@@ -363,10 +270,20 @@
   </div>
 
   <div class="hud">
+    <div class="hud-header">
+      <span class="status-badge">
+        <span class="dot" id="status-dot"></span>
+        <span id="status-text">Loading 3D model...</span>
+      </span>
+      <div style="display:flex; gap:6px;">
+        <button id="mic-toggle" class="secondary" title="Toggle microphone">🎤 Mic: ON</button>
+        <button id="reset-conv-btn" class="secondary" title="Clear conversation">Reset chat</button>
+      </div>
+    </div>
     <div class="input-row">
-      <textarea id="speech-input" placeholder="Ask Girl12 anything, or just look at the camera and speak..."></textarea>
+      <textarea id="speech-input" placeholder="Ask Girl12 anything, or just look at the camera and speak..." aria-label="Message input"></textarea>
       <div class="btn-col">
-        <button id="chat-btn" class="round-btn" disabled title="Send message to AI (Enter)">
+        <button id="chat-btn" class="round-btn" disabled title="Send message (Enter)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
         </button>
       </div>
@@ -379,27 +296,29 @@
     import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
     const container = document.getElementById('canvas-container');
-    const statusDot = { className: '', classList: { add() {}, contains() { return false; } } };
-    const statusText = { textContent: '' };
+    const statusDot = document.getElementById('status-dot');
+    const statusText = document.getElementById('status-text');
     const chatBtn = document.getElementById('chat-btn');
     const speechInput = document.getElementById('speech-input');
     const speechBubble = document.getElementById('speech-bubble');
     const speechBubbleText = document.getElementById('speech-bubble-text');
+    const micToggle = document.getElementById('mic-toggle');
+    const resetConvBtn = document.getElementById('reset-conv-btn');
 
+    function setStatus(state, text) {
+      statusDot.className = 'dot' + (state ? ' ' + state : '');
+      statusText.textContent = text;
+    }
     function showSpeechBubble(text) {
-      if (!text) {
-        speechBubble.classList.remove('visible');
-        return;
-      }
+      if (!text) { speechBubble.classList.remove('visible'); return; }
       speechBubbleText.textContent = text;
       speechBubble.classList.add('visible');
     }
 
-    // 1. Scene, Camera, Renderer
+    // SCENE
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.05, 50);
     camera.position.set(0, 1.64, 1.30);
-
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -418,203 +337,117 @@
     controls.maxAzimuthAngle = 0.85;
     controls.update();
 
-    // Lighting
     const hemiLight = new THREE.HemisphereLight(0xffffff, 0x333344, 1.6);
     hemiLight.position.set(0, 3, 0);
     scene.add(hemiLight);
-
     const keyLight = new THREE.DirectionalLight(0xfff8f0, 2.2);
     keyLight.position.set(1.2, 2.2, 1.8);
     scene.add(keyLight);
-
     const rimLight = new THREE.DirectionalLight(0x90b4ff, 1.0);
     rimLight.position.set(-1.5, 1.8, -1.5);
     scene.add(rimLight);
 
-    // 1b. Build 3D YouTuber Studio Environment (wall, floor, furniture, plants, artworks, YouTube trophy)
+    // STUDIO (raccourci pour lisibilité — reprend exactement ton code original)
     function buildYouTuberStudio() {
       const studio = new THREE.Group();
-
-      // Floor & Back Wall
-      const floorMat = new THREE.MeshStandardMaterial({ color: 0x241f1c, roughness: 0.75 });
-      const floor = new THREE.Mesh(new THREE.PlaneGeometry(10, 8), floorMat);
+      const floor = new THREE.Mesh(new THREE.PlaneGeometry(10, 8), new THREE.MeshStandardMaterial({ color: 0x241f1c, roughness: 0.75 }));
       floor.rotation.x = -Math.PI / 2;
       studio.add(floor);
-
-      const wallMat = new THREE.MeshStandardMaterial({ color: 0x1c202b, roughness: 0.9 });
-      const backWall = new THREE.Mesh(new THREE.PlaneGeometry(10, 5), wallMat);
+      const backWall = new THREE.Mesh(new THREE.PlaneGeometry(10, 5), new THREE.MeshStandardMaterial({ color: 0x1c202b, roughness: 0.9 }));
       backWall.position.set(0, 2.5, -1.65);
       studio.add(backWall);
-
-      // Warm studio LED accent strip on back wall
-      const ledMat = new THREE.MeshBasicMaterial({ color: 0xff6b8b });
-      const ledStrip = new THREE.Mesh(new THREE.BoxGeometry(3.6, 0.025, 0.02), ledMat);
+      const ledStrip = new THREE.Mesh(new THREE.BoxGeometry(3.6, 0.025, 0.02), new THREE.MeshBasicMaterial({ color: 0xff6b8b }));
       ledStrip.position.set(0, 2.45, -1.63);
       studio.add(ledStrip);
-
       const studioGlow = new THREE.PointLight(0xff7eb3, 1.8, 5);
       studioGlow.position.set(0, 2.3, -1.3);
       studio.add(studioGlow);
-
-      // Furniture: Right-side Credenza / Studio Desk
       const woodMat = new THREE.MeshStandardMaterial({ color: 0x5c3d2e, roughness: 0.6 });
       const legMat = new THREE.MeshStandardMaterial({ color: 0x18181b, roughness: 0.4, metalness: 0.6 });
       const credenza = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.55, 0.45), woodMat);
       credenza.position.set(1.05, 0.55, -1.35);
       studio.add(credenza);
-      [[-0.48, -0.18], [0.48, -0.18], [-0.48, 0.18], [0.48, 0.18]].forEach(([dx, dz]) => {
+      [[-0.48,-0.18],[0.48,-0.18],[-0.48,0.18],[0.48,0.18]].forEach(([dx,dz]) => {
         const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.015, 0.3, 10), legMat);
-        leg.position.set(1.05 + dx, 0.15, -1.35 + dz);
+        leg.position.set(1.05+dx, 0.15, -1.35+dz);
         studio.add(leg);
       });
-
-      // Furniture: Left-side Floating Shelf
       const shelf = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.04, 0.25), woodMat);
       shelf.position.set(-0.95, 1.35, -1.51);
       studio.add(shelf);
-
-      // Books on Floating Shelf
-      const bookColors = [0xe11d48, 0x3b82f6, 0xf59e0b, 0x10b981];
-      bookColors.forEach((col, idx) => {
-        const book = new THREE.Mesh(
-          new THREE.BoxGeometry(0.045, 0.22 - idx * 0.015, 0.16),
-          new THREE.MeshStandardMaterial({ color: col, roughness: 0.7 })
-        );
-        book.position.set(-1.2 + idx * 0.055, 1.48 - idx * 0.007, -1.5);
+      [0xe11d48,0x3b82f6,0xf59e0b,0x10b981].forEach((col,idx) => {
+        const book = new THREE.Mesh(new THREE.BoxGeometry(0.045, 0.22-idx*0.015, 0.16), new THREE.MeshStandardMaterial({ color: col, roughness: 0.7 }));
+        book.position.set(-1.2+idx*0.055, 1.48-idx*0.007, -1.5);
         studio.add(book);
       });
-
-      // Tall Potted Plant (Left)
       const potMat = new THREE.MeshStandardMaterial({ color: 0xd6d3d1, roughness: 0.5 });
       const pot = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.12, 0.32, 18), potMat);
       pot.position.set(-1.12, 0.16, -1.15);
       studio.add(pot);
-
       const leafMat = new THREE.MeshStandardMaterial({ color: 0x2d6a4f, roughness: 0.55 });
-      for (let i = 0; i < 9; i++) {
-        const angle = (i / 9) * Math.PI * 2;
+      for (let i=0;i<9;i++){
+        const angle = (i/9)*Math.PI*2;
         const leaf = new THREE.Mesh(new THREE.ConeGeometry(0.09, 0.42, 6), leafMat);
-        leaf.position.set(
-          -1.12 + Math.cos(angle) * 0.12,
-          0.48 + (i % 3) * 0.12,
-          -1.15 + Math.sin(angle) * 0.12
-        );
-        leaf.rotation.z = -Math.cos(angle) * 0.45;
-        leaf.rotation.x = Math.sin(angle) * 0.45;
+        leaf.position.set(-1.12+Math.cos(angle)*0.12, 0.48+(i%3)*0.12, -1.15+Math.sin(angle)*0.12);
+        leaf.rotation.z = -Math.cos(angle)*0.45;
+        leaf.rotation.x = Math.sin(angle)*0.45;
         studio.add(leaf);
       }
-
-      // Small Desk Plant on Credenza (Right)
       const smallPot = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.05, 0.12, 14), potMat);
       smallPot.position.set(1.32, 0.88, -1.32);
       studio.add(smallPot);
       const smallBush = new THREE.Mesh(new THREE.DodecahedronGeometry(0.11, 1), leafMat);
       smallBush.position.set(1.32, 1.0, -1.32);
       studio.add(smallBush);
-
-      // Framed Artworks on Back Wall
-      function addArtwork(x, y, w, h, bgColor, accentColor) {
-        const frame = new THREE.Mesh(
-          new THREE.BoxGeometry(w + 0.06, h + 0.06, 0.03),
-          new THREE.MeshStandardMaterial({ color: 0x111827, roughness: 0.4 })
-        );
-        frame.position.set(x, y, -1.63);
-        studio.add(frame);
-
-        const canvas = new THREE.Mesh(
-          new THREE.BoxGeometry(w, h, 0.035),
-          new THREE.MeshStandardMaterial({ color: bgColor, roughness: 0.8 })
-        );
-        canvas.position.set(x, y, -1.625);
-        studio.add(canvas);
-
-        const shape = new THREE.Mesh(
-          new THREE.CircleGeometry(Math.min(w, h) * 0.28, 24),
-          new THREE.MeshStandardMaterial({ color: accentColor, roughness: 0.6 })
-        );
-        shape.position.set(x, y, -1.605);
-        studio.add(shape);
+      function addArtwork(x,y,w,h,bg,ac){
+        const frame = new THREE.Mesh(new THREE.BoxGeometry(w+0.06,h+0.06,0.03), new THREE.MeshStandardMaterial({ color:0x111827, roughness:0.4 }));
+        frame.position.set(x,y,-1.63); studio.add(frame);
+        const canvas = new THREE.Mesh(new THREE.BoxGeometry(w,h,0.035), new THREE.MeshStandardMaterial({ color:bg, roughness:0.8 }));
+        canvas.position.set(x,y,-1.625); studio.add(canvas);
+        const shape = new THREE.Mesh(new THREE.CircleGeometry(Math.min(w,h)*0.28,24), new THREE.MeshStandardMaterial({ color:ac, roughness:0.6 }));
+        shape.position.set(x,y,-1.605); studio.add(shape);
       }
-      addArtwork(-0.88, 1.92, 0.44, 0.56, 0xfef3c7, 0xe11d48);
-      addArtwork(-0.34, 1.98, 0.34, 0.42, 0xe0f2fe, 0x0284c7);
-
-      // YouTube Creator Award Trophy (Silver/Gold Play Button Plaque on Wall)
+      addArtwork(-0.88,1.92,0.44,0.56,0xfef3c7,0xe11d48);
+      addArtwork(-0.34,1.98,0.34,0.42,0xe0f2fe,0x0284c7);
+      // Trophée YouTube
       const plaqueGroup = new THREE.Group();
-      const plaqueBase = new THREE.Mesh(
-        new THREE.BoxGeometry(0.32, 0.24, 0.025),
-        new THREE.MeshStandardMaterial({ color: 0x18181b, roughness: 0.3, metalness: 0.7 })
-      );
-      plaqueGroup.add(plaqueBase);
-
-      const silverBorder = new THREE.Mesh(
-        new THREE.BoxGeometry(0.34, 0.26, 0.015),
-        new THREE.MeshStandardMaterial({ color: 0xe5e7eb, roughness: 0.2, metalness: 0.9 })
-      );
+      plaqueGroup.add(new THREE.Mesh(new THREE.BoxGeometry(0.32,0.24,0.025), new THREE.MeshStandardMaterial({ color:0x18181b, roughness:0.3, metalness:0.7 })));
+      const silverBorder = new THREE.Mesh(new THREE.BoxGeometry(0.34,0.26,0.015), new THREE.MeshStandardMaterial({ color:0xe5e7eb, roughness:0.2, metalness:0.9 }));
       silverBorder.position.z = -0.006;
       plaqueGroup.add(silverBorder);
-
-      const playBg = new THREE.Mesh(
-        new THREE.BoxGeometry(0.14, 0.10, 0.015),
-        new THREE.MeshStandardMaterial({ color: 0xd4af37, roughness: 0.2, metalness: 0.95 })
-      );
-      playBg.position.set(0, 0.015, 0.012);
+      const playBg = new THREE.Mesh(new THREE.BoxGeometry(0.14,0.10,0.015), new THREE.MeshStandardMaterial({ color:0xd4af37, roughness:0.2, metalness:0.95 }));
+      playBg.position.set(0,0.015,0.012);
       plaqueGroup.add(playBg);
-
-      const playTriangle = new THREE.Mesh(
-        new THREE.ConeGeometry(0.028, 0.045, 3),
-        new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.2, metalness: 0.5 })
-      );
-      playTriangle.rotation.z = -Math.PI / 2;
-      playTriangle.rotation.x = Math.PI / 2;
-      playTriangle.position.set(0.004, 0.015, 0.022);
+      const playTriangle = new THREE.Mesh(new THREE.ConeGeometry(0.028,0.045,3), new THREE.MeshStandardMaterial({ color:0xffffff, roughness:0.2, metalness:0.5 }));
+      playTriangle.rotation.z = -Math.PI/2; playTriangle.rotation.x = Math.PI/2;
+      playTriangle.position.set(0.004,0.015,0.022);
       plaqueGroup.add(playTriangle);
-
       plaqueGroup.position.set(0.82, 1.78, -1.62);
       studio.add(plaqueGroup);
-
       scene.add(studio);
     }
     buildYouTuberStudio();
-
-    // Dynamic YouTuber-style Camera Shots (eye-level with proper headroom)
+        // CAMERA SHOTS + PAD
     const CAM_SHOTS = [
-      { pos: new THREE.Vector3(0, 1.64, 1.30), target: new THREE.Vector3(0, 1.54, 0) },       // Eye-Level Medium Front
-      { pos: new THREE.Vector3(0.03, 1.65, 0.65), target: new THREE.Vector3(0, 1.61, 0) },    // Face Close-Up
-      { pos: new THREE.Vector3(-0.38, 1.64, 1.15), target: new THREE.Vector3(0, 1.55, 0) },   // Left Three-Quarter
-      { pos: new THREE.Vector3(0.38, 1.64, 1.15), target: new THREE.Vector3(0, 1.55, 0) },    // Right Three-Quarter
-      { pos: new THREE.Vector3(0.12, 1.62, 1.85), target: new THREE.Vector3(0, 1.48, 0) },    // Farther Studio Shot
+      { pos: new THREE.Vector3(0, 1.64, 1.30), target: new THREE.Vector3(0, 1.54, 0) },
+      { pos: new THREE.Vector3(0.03, 1.65, 0.65), target: new THREE.Vector3(0, 1.61, 0) },
+      { pos: new THREE.Vector3(-0.38, 1.64, 1.15), target: new THREE.Vector3(0, 1.55, 0) },
+      { pos: new THREE.Vector3(0.38, 1.64, 1.15), target: new THREE.Vector3(0, 1.55, 0) },
+      { pos: new THREE.Vector3(0.12, 1.62, 1.85), target: new THREE.Vector3(0, 1.48, 0) },
     ];
-    let activeShotIdx = 0;
-    let nextCamSwitchTime = 0;
-    let manualCamUntil = 0;
+    let activeShotIdx = 0, nextCamSwitchTime = 0, manualCamUntil = 0;
 
-    // Blender-style Manual Camera Controls (with safe studio limits)
     function nudgeCamera(dAzimuth, dPolar, dZoom) {
-      manualCamUntil = performance.now() / 1000 + 8.0;
+      manualCamUntil = performance.now()/1000 + 8.0;
       const offset = camera.position.clone().sub(controls.target);
-      const spherical = new THREE.Spherical().setFromVector3(offset);
-
-      spherical.theta = THREE.MathUtils.clamp(
-        spherical.theta + dAzimuth,
-        controls.minAzimuthAngle,
-        controls.maxAzimuthAngle
-      );
-      spherical.phi = THREE.MathUtils.clamp(
-        spherical.phi + dPolar,
-        controls.minPolarAngle,
-        controls.maxPolarAngle
-      );
-      spherical.radius = THREE.MathUtils.clamp(
-        spherical.radius + dZoom,
-        controls.minDistance,
-        controls.maxDistance
-      );
-
-      offset.setFromSpherical(spherical);
+      const sph = new THREE.Spherical().setFromVector3(offset);
+      sph.theta = THREE.MathUtils.clamp(sph.theta + dAzimuth, controls.minAzimuthAngle, controls.maxAzimuthAngle);
+      sph.phi = THREE.MathUtils.clamp(sph.phi + dPolar, controls.minPolarAngle, controls.maxPolarAngle);
+      sph.radius = THREE.MathUtils.clamp(sph.radius + dZoom, controls.minDistance, controls.maxDistance);
+      offset.setFromSpherical(sph);
       camera.position.copy(controls.target).add(offset);
       controls.update();
     }
-
     document.getElementById('cam-left').addEventListener('click', () => nudgeCamera(-0.18, 0, 0));
     document.getElementById('cam-right').addEventListener('click', () => nudgeCamera(0.18, 0, 0));
     document.getElementById('cam-up').addEventListener('click', () => nudgeCamera(0, -0.08, 0));
@@ -627,124 +460,74 @@
       controls.target.copy(CAM_SHOTS[0].target);
       controls.update();
     });
-    controls.addEventListener('start', () => {
-      manualCamUntil = performance.now() / 1000 + 8.0;
-    });
+    controls.addEventListener('start', () => { manualCamUntil = performance.now()/1000 + 8.0; });
 
-    // 2. Load Girl12 GLB Model & Setup Rig References
-    const VIS_KEYS = [
-      'V_Open', 'V_Explosive', 'V_Dental_Lip', 'V_Tight_O',
-      'V_Tight', 'V_Wide', 'V_Affricate', 'V_Lip_Open'
-    ];
-
-    let mixer = null;
-    let gestureAction = null;
-    let morphMeshes = []; // Meshes on CC_Base_Body that share the shape keys
-    let blinkMeshes = []; // Meshes that have Eye_Blink_L / Eye_Blink_R
-    let jawBone = null;
-    let jawRestQuat = null;
-
-    // Speech Playback State
-    let isSpeaking = false;
-    let speechStartTime = 0;
-    let speechDuration = 0;
-    let activeVisemeTimeline = [];
-    let currentVisemeWeights = {};
-    VIS_KEYS.forEach(k => currentVisemeWeights[k] = 0);
-    let currentAudio = null;
+    // GLB
+    const VIS_KEYS = ['V_Open','V_Explosive','V_Dental_Lip','V_Tight_O','V_Tight','V_Wide','V_Affricate','V_Lip_Open'];
+    let mixer=null, gestureAction=null, morphMeshes=[], blinkMeshes=[], jawBone=null, jawRestQuat=null;
+    let isSpeaking=false, speechStartTime=0, speechDuration=0, activeVisemeTimeline=[];
+    let currentVisemeWeights={}; VIS_KEYS.forEach(k => currentVisemeWeights[k]=0);
+    let currentAudio=null;
 
     const loader = new GLTFLoader();
-    loader.load(
-      '/girl12.glb',
+    loader.load('/girl12.glb',
       (gltf) => {
         const model = gltf.scene;
         scene.add(model);
-
         model.traverse((obj) => {
-          if (obj.isBone && obj.name === 'CC_Base_JawRoot') {
-            jawBone = obj;
-            jawRestQuat = obj.quaternion.clone();
-          }
+          if (obj.isBone && obj.name === 'CC_Base_JawRoot') { jawBone = obj; jawRestQuat = obj.quaternion.clone(); }
           if (obj.isMesh) {
             obj.frustumCulled = false;
             if (obj.morphTargetDictionary) {
-              if ('V_Open' in obj.morphTargetDictionary) {
-                morphMeshes.push(obj);
-              }
-              if ('Eye_Blink_L' in obj.morphTargetDictionary) {
-                blinkMeshes.push(obj);
-              }
+              if ('V_Open' in obj.morphTargetDictionary) morphMeshes.push(obj);
+              if ('Eye_Blink_L' in obj.morphTargetDictionary) blinkMeshes.push(obj);
             }
           }
         });
-
-        // Setup AnimationMixer for Body_Stand_And_Talk
         if (gltf.animations && gltf.animations.length > 0) {
           mixer = new THREE.AnimationMixer(model);
           const clip = gltf.animations[0];
-
-          // Filter out CC_Base_JawRoot tracks from the body clip so our real-time
-          // lip-sync controller has 100% authority over the jaw bone!
           clip.tracks = clip.tracks.filter(t => !t.name.includes('CC_Base_JawRoot'));
-
           gestureAction = mixer.clipAction(clip);
           gestureAction.play();
-          // Start paused at frame 0 (calm standing rest pose with hands at sides)
           gestureAction.paused = true;
           gestureAction.time = 0;
           mixer.update(0.001);
         }
-
-        statusDot.classList.add('ready');
-        statusText.textContent = 'Ready — Idle Standing';
+        setStatus('ready', 'Ready — Idle Standing');
         chatBtn.disabled = false;
       },
       (xhr) => {
-        if (xhr.total) {
-          const pct = Math.round((xhr.loaded / xhr.total) * 100);
-          statusText.textContent = `Loading 3D Model (${pct}%)...`;
-        }
+        if (xhr.total) setStatus('', `Loading 3D Model (${Math.round((xhr.loaded/xhr.total)*100)}%)...`);
       },
       (err) => {
         console.error('Error loading GLB:', err);
-        statusText.textContent = 'Error loading girl12.glb';
+        setStatus('error', 'Model missing — text-only mode');
+        chatBtn.disabled = false;
       }
     );
 
-    // Helper to set a morph target across all primitive sub-meshes of CC_Base_Body
     function setMorphTarget(name, value, meshList = morphMeshes) {
       for (const mesh of meshList) {
         const idx = mesh.morphTargetDictionary?.[name];
-        if (idx !== undefined && mesh.morphTargetInfluences) {
-          mesh.morphTargetInfluences[idx] = value;
-        }
+        if (idx !== undefined && mesh.morphTargetInfluences) mesh.morphTargetInfluences[idx] = value;
       }
     }
 
-    // Helper to play lip-synced audio + gestures for any response payload
     function playSpeechPayload(data, spokenText) {
       activeVisemeTimeline = data.visemes || [];
       speechDuration = data.duration || 2.0;
-
       const startSyncedPlayback = () => {
         isSpeaking = true;
-        speechStartTime = performance.now() / 1000;
-        statusDot.className = 'dot speaking';
-        statusText.textContent = `Speaking: "${spokenText.slice(0, 38)}..."`;
-
-        // Resume hand gestures from speaking window (frame 12)
-        if (gestureAction) {
-          gestureAction.paused = false;
-          gestureAction.time = 0.5;
-          gestureAction.setEffectiveWeight(1.0);
-        }
+        speechStartTime = performance.now()/1000;
+        setStatus('speaking', `Speaking: "${spokenText.slice(0,38)}..."`);
+        if (gestureAction) { gestureAction.paused = false; gestureAction.time = 0.5; gestureAction.setEffectiveWeight(1.0); }
       };
-
       if (data.audio_url) {
         currentAudio = new Audio(data.audio_url);
         currentAudio.addEventListener('play', startSyncedPlayback, { once: true });
         currentAudio.addEventListener('ended', () => { isSpeaking = false; });
-        currentAudio.play().catch(e => console.warn('Audio play error:', e));
+        currentAudio.play().catch(e => { console.warn('Audio play error:', e); startSyncedPlayback(); });
       } else if ('speechSynthesis' in window) {
         const utter = new SpeechSynthesisUtterance(spokenText);
         utter.onstart = startSyncedPlayback;
@@ -757,31 +540,19 @@
 
     let chatHistory = [];
 
-    // 3. Ask OpenRouter AI (/api/chat)
     async function triggerAiChat(customPrompt) {
       const userText = (customPrompt !== undefined ? customPrompt : speechInput.value).trim();
       if (!userText) return;
-
       speechInput.value = '';
       chatBtn.disabled = true;
-      statusDot.className = 'dot';
-      statusText.textContent = 'Thinking with OpenRouter LLM...';
-
-      if (currentAudio) {
-        currentAudio.pause();
-        currentAudio = null;
-      }
+      setStatus('', 'Thinking with OpenRouter LLM...');
+      if (currentAudio) { currentAudio.pause(); currentAudio = null; }
       window.speechSynthesis?.cancel();
-
       try {
         const res = await fetch('/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            message: userText,
-            history: chatHistory,
-            use_server_tts: true
-          })
+          body: JSON.stringify({ message: userText, history: chatHistory, use_server_tts: true })
         });
         const data = await res.json();
         if (data.reply_text) {
@@ -790,11 +561,11 @@
           chatHistory.push({ role: 'assistant', content: data.reply_text });
           playSpeechPayload(data, data.reply_text);
         } else {
-          statusText.textContent = 'No reply received from LLM.';
+          setStatus('', 'No reply received from LLM.');
         }
       } catch (e) {
         console.error(e);
-        statusText.textContent = 'Error connecting to /api/chat';
+        setStatus('error', 'Error connecting to /api/chat');
       } finally {
         chatBtn.disabled = false;
       }
@@ -802,62 +573,40 @@
 
     chatBtn.addEventListener('click', () => triggerAiChat());
     speechInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        triggerAiChat();
-      }
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); triggerAiChat(); }
     });
 
-    // 3c. Automatic Webcam Person Detection + Microphone Voice Activity Detection (VAD)
+    // WEBCAM + MIC
     const webcamVideo = document.getElementById('webcam-video');
     const webcamDot = document.getElementById('webcam-dot');
     const webcamLabel = document.getElementById('webcam-label');
 
-    let recordedPcm = [];
-    let isAutoRecording = false;
-    let isSendingAudio = false;
-    let lastSpeechTime = 0;
-    let personPresent = true; // Updated by FaceDetector or motion/presence check
+    let recordedPcm=[], isAutoRecording=false, isSendingAudio=false, lastSpeechTime=0;
+    let personPresent=false, micEnabled=true;
+    let processorRef=null, micSourceRef=null;
 
-    function encodeWAV(samples, sampleRate = 16000) {
-      const buffer = new ArrayBuffer(44 + samples.length * 2);
+    function encodeWAV(samples, sampleRate=16000) {
+      const buffer = new ArrayBuffer(44 + samples.length*2);
       const view = new DataView(buffer);
-
-      function writeString(offset, string) {
-        for (let i = 0; i < string.length; i++) {
-          view.setUint8(offset + i, string.charCodeAt(i));
-        }
-      }
-
-      writeString(0, 'RIFF');
-      view.setUint32(4, 36 + samples.length * 2, true);
-      writeString(8, 'WAVE');
-      writeString(12, 'fmt ');
-      view.setUint32(16, 16, true);
-      view.setUint16(20, 1, true);
-      view.setUint16(22, 1, true);
-      view.setUint32(24, sampleRate, true);
-      view.setUint32(28, sampleRate * 2, true);
-      view.setUint16(32, 2, true);
-      view.setUint16(34, 16, true);
-      writeString(36, 'data');
-      view.setUint32(40, samples.length * 2, true);
-
-      let offset = 44;
-      for (let i = 0; i < samples.length; i++, offset += 2) {
+      function writeString(o,s){ for(let i=0;i<s.length;i++) view.setUint8(o+i, s.charCodeAt(i)); }
+      writeString(0,'RIFF');
+      view.setUint32(4, 36+samples.length*2, true);
+      writeString(8,'WAVE'); writeString(12,'fmt ');
+      view.setUint32(16,16,true); view.setUint16(20,1,true); view.setUint16(22,1,true);
+      view.setUint32(24,sampleRate,true); view.setUint32(28,sampleRate*2,true);
+      view.setUint16(32,2,true); view.setUint16(34,16,true);
+      writeString(36,'data'); view.setUint32(40,samples.length*2,true);
+      let o=44;
+      for (let i=0;i<samples.length;i++,o+=2){
         const s = Math.max(-1, Math.min(1, samples[i]));
-        view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+        view.setInt16(o, s<0 ? s*0x8000 : s*0x7FFF, true);
       }
       return buffer;
     }
-
     function bufferToBase64(buffer) {
-      let binary = '';
-      const bytes = new Uint8Array(buffer);
-      for (let i = 0; i < bytes.byteLength; i++) {
-        binary += String.fromCharCode(bytes[i]);
-      }
-      return window.btoa(binary);
+      let bin=''; const bytes = new Uint8Array(buffer);
+      for (let i=0;i<bytes.byteLength;i++) bin += String.fromCharCode(bytes[i]);
+      return window.btoa(bin);
     }
 
     async function sendCapturedVoice(pcmSamples) {
@@ -865,20 +614,13 @@
       isSendingAudio = true;
       webcamDot.classList.remove('recording');
       webcamLabel.textContent = 'Thinking...';
-
       const wavBuffer = encodeWAV(pcmSamples, 16000);
       const audioBase64 = bufferToBase64(wavBuffer);
-
       try {
         const res = await fetch('/api/audio-chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            audio_base64: audioBase64,
-            audio_format: 'wav',
-            history: chatHistory,
-            use_server_tts: true
-          })
+          body: JSON.stringify({ audio_base64: audioBase64, audio_format: 'wav', history: chatHistory, use_server_tts: true })
         });
         const data = await res.json();
         if (data.reply_text) {
@@ -890,7 +632,7 @@
         console.error('Error sending auto-captured audio:', e);
       } finally {
         isSendingAudio = false;
-        webcamLabel.textContent = personPresent ? 'Watching & Listening' : 'Waiting for person...';
+        webcamLabel.textContent = micEnabled && personPresent ? 'Watching & Listening' : (!micEnabled ? 'Mic off' : 'Waiting for person...');
       }
     }
 
@@ -899,8 +641,8 @@
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         webcamVideo.srcObject = stream;
         webcamLabel.textContent = 'Watching & Listening';
+        personPresent = true;
 
-        // Optional FaceDetector API for person detection
         const faceDetector = ('FaceDetector' in window) ? new window.FaceDetector({ fastMode: true }) : null;
         if (faceDetector) {
           setInterval(async () => {
@@ -908,34 +650,31 @@
               try {
                 const faces = await faceDetector.detect(webcamVideo);
                 personPresent = faces.length > 0;
-                if (!isAutoRecording && !isSendingAudio) {
-                  webcamLabel.textContent = personPresent ? 'Watching & Listening' : 'Waiting for person...';
-                }
-              } catch (_) {}
+              } catch(_) {}
             }
           }, 700);
         }
 
-        // Microphone Voice Activity Detection (VAD)
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
         const micSource = audioCtx.createMediaStreamSource(stream);
         const processor = audioCtx.createScriptProcessor(4096, 1, 1);
+        micSourceRef = micSource;
+        processorRef = processor;
 
         processor.onaudioprocess = (e) => {
-          if (isSpeaking || isSendingAudio || !personPresent) {
-            isAutoRecording = false;
-            recordedPcm = [];
+          if (!micEnabled || isSpeaking || isSendingAudio || !personPresent) {
+            if (isAutoRecording) {
+              isAutoRecording = false;
+              recordedPcm = [];
+              webcamDot.classList.remove('recording');
+            }
             return;
           }
-
           const input = e.inputBuffer.getChannelData(0);
           let sumSq = 0;
-          for (let i = 0; i < input.length; i++) {
-            sumSq += input[i] * input[i];
-          }
+          for (let i=0;i<input.length;i++) sumSq += input[i]*input[i];
           const rms = Math.sqrt(sumSq / input.length);
           const nowMs = performance.now();
-
           if (rms > 0.025) {
             if (!isAutoRecording) {
               isAutoRecording = true;
@@ -944,13 +683,9 @@
               webcamLabel.textContent = 'Listening to you...';
             }
             lastSpeechTime = nowMs;
-            for (let i = 0; i < input.length; i++) {
-              recordedPcm.push(input[i]);
-            }
+            for (let i=0;i<input.length;i++) recordedPcm.push(input[i]);
           } else if (isAutoRecording) {
-            for (let i = 0; i < input.length; i++) {
-              recordedPcm.push(input[i]);
-            }
+            for (let i=0;i<input.length;i++) recordedPcm.push(input[i]);
             if (nowMs - lastSpeechTime > 1100) {
               isAutoRecording = false;
               const captured = recordedPcm.slice();
@@ -965,12 +700,37 @@
       } catch (err) {
         console.warn('Webcam/Mic auto-init error:', err);
         webcamLabel.textContent = 'Camera/Mic blocked';
+        webcamDot.classList.add('off');
+        personPresent = false;
+        micEnabled = false;
+        micToggle.textContent = '🔇 Mic: OFF';
       }
     }
-
     initAutoWebcamAndMic();
 
-    // 4. Real-Time Render & Animation Loop
+    // Handlers boutons secondaires
+    micToggle.addEventListener('click', () => {
+      micEnabled = !micEnabled;
+      micToggle.textContent = micEnabled ? '🎤 Mic: ON' : '🔇 Mic: OFF';
+      webcamDot.classList.toggle('off', !micEnabled);
+      if (!micEnabled) {
+        isAutoRecording = false;
+        recordedPcm = [];
+        webcamDot.classList.remove('recording');
+        webcamLabel.textContent = 'Mic off';
+      } else {
+        webcamLabel.textContent = personPresent ? 'Watching & Listening' : 'Waiting for person...';
+      }
+    });
+
+    resetConvBtn.addEventListener('click', () => {
+      chatHistory = [];
+      showSpeechBubble('');
+      speechInput.value = '';
+      setStatus('ready', 'Ready — Idle Standing');
+    });
+
+    // RENDER LOOP
     const clock = new THREE.Clock();
     let nextBlinkTime = 2.0;
 
@@ -978,17 +738,13 @@
       requestAnimationFrame(animate);
       const dt = clock.getDelta();
       const now = performance.now() / 1000;
-
       controls.update();
 
-      // Automatic YouTuber-style camera switching while speaking (paused briefly if user manually adjusted)
       if (now > manualCamUntil) {
         if (isSpeaking) {
           if (now > nextCamSwitchTime) {
             let nextIdx = activeShotIdx;
-            while (nextIdx === activeShotIdx) {
-              nextIdx = Math.floor(Math.random() * CAM_SHOTS.length);
-            }
+            while (nextIdx === activeShotIdx) nextIdx = Math.floor(Math.random() * CAM_SHOTS.length);
             activeShotIdx = nextIdx;
             nextCamSwitchTime = now + 2.8 + Math.random() * 1.4;
           }
@@ -1003,86 +759,64 @@
         }
       }
 
-      // Update skeletal hand-gesture animation
       if (mixer && gestureAction) {
         if (isSpeaking) {
           mixer.update(dt);
-          // Loop within the active hand-gesture window (0.5s to 24.0s) if speech is long
-          if (gestureAction.time > 24.0) {
-            gestureAction.time = 1.5;
-          }
+          if (gestureAction.time > 24.0) gestureAction.time = 1.5;
         } else {
-          // Smoothly return to frame 0 (hands resting at sides) when silent
           gestureAction.time = THREE.MathUtils.lerp(gestureAction.time, 0.0, dt * 4.0);
           mixer.update(0.0001);
         }
       }
 
-      // Evaluate active viseme targets
       const targetWeights = {};
       VIS_KEYS.forEach(k => targetWeights[k] = 0);
-
       if (isSpeaking) {
         const elapsed = now - speechStartTime;
         if (elapsed > speechDuration + 0.15) {
           isSpeaking = false;
-          statusDot.className = 'dot ready';
-          statusText.textContent = 'Ready — Idle Standing';
+          setStatus('ready', 'Ready — Idle Standing');
         } else {
           for (const ev of activeVisemeTimeline) {
             if (elapsed >= ev.start && elapsed <= ev.end) {
-              for (const [k, v] of Object.entries(ev.weights)) {
-                targetWeights[k] = v;
-              }
+              for (const [k, v] of Object.entries(ev.weights)) targetWeights[k] = v;
               break;
             }
           }
         }
-      } else if (statusDot.classList.contains('speaking')) {
-        statusDot.className = 'dot ready';
-        statusText.textContent = 'Ready — Idle Standing';
       }
 
-      // Smoothly interpolate viseme morph targets (co-articulation)
       const smoothSpeed = 18.0 * dt;
       for (const k of VIS_KEYS) {
-        currentVisemeWeights[k] = THREE.MathUtils.lerp(
-          currentVisemeWeights[k],
-          targetWeights[k] || 0,
-          Math.min(1.0, smoothSpeed)
-        );
+        currentVisemeWeights[k] = THREE.MathUtils.lerp(currentVisemeWeights[k], targetWeights[k] || 0, Math.min(1.0, smoothSpeed));
         setMorphTarget(k, currentVisemeWeights[k]);
       }
 
-      // Drive the Jaw Bone (CC_Base_JawRoot) in sync with visemes so lower teeth & chin open!
       if (jawBone && jawRestQuat) {
-        const jawOpenRad = Math.min(
-          0.28,
-          0.25 * currentVisemeWeights['V_Open'] +
-          0.08 * currentVisemeWeights['V_Wide'] +
-          0.12 * currentVisemeWeights['V_Tight_O'] +
-          0.08 * currentVisemeWeights['V_Lip_Open'] +
-          0.06 * currentVisemeWeights['V_Affricate'] +
-          0.04 * currentVisemeWeights['V_Dental_Lip']
+        const jawOpenRad = Math.min(0.28,
+          0.25*currentVisemeWeights['V_Open'] +
+          0.08*currentVisemeWeights['V_Wide'] +
+          0.12*currentVisemeWeights['V_Tight_O'] +
+          0.08*currentVisemeWeights['V_Lip_Open'] +
+          0.06*currentVisemeWeights['V_Affricate'] +
+          0.04*currentVisemeWeights['V_Dental_Lip']
         );
-        const rotZ = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), jawOpenRad);
+        const rotZ = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,0,1), jawOpenRad);
         jawBone.quaternion.copy(jawRestQuat).multiply(rotZ);
       }
 
-      // Subtle friendly smile & eyebrow movement while speaking
-      const smileVal = isSpeaking ? 0.22 + 0.08 * Math.sin(now * 2.0) : 0.12;
+      const smileVal = isSpeaking ? 0.22 + 0.08*Math.sin(now*2.0) : 0.12;
       setMorphTarget('Mouth_Smile_L', smileVal);
       setMorphTarget('Mouth_Smile_R', smileVal);
-      setMorphTarget('Cheek_Raise_L', smileVal * 0.5);
-      setMorphTarget('Cheek_Raise_R', smileVal * 0.5);
+      setMorphTarget('Cheek_Raise_L', smileVal*0.5);
+      setMorphTarget('Cheek_Raise_R', smileVal*0.5);
 
-      const browVal = isSpeaking ? Math.max(0, 0.3 * Math.sin(now * 3.2)) : 0.0;
+      const browVal = isSpeaking ? Math.max(0, 0.3*Math.sin(now*3.2)) : 0.0;
       setMorphTarget('Brow_Raise_Inner_L', browVal);
       setMorphTarget('Brow_Raise_Inner_R', browVal);
       setMorphTarget('Brow_Raise_Outer_L', browVal);
       setMorphTarget('Brow_Raise_Outer_R', browVal);
 
-      // Automatic natural eye blinking every 3–5 seconds
       if (now > nextBlinkTime) {
         const blinkPhase = (now - nextBlinkTime) / 0.18;
         if (blinkPhase <= 1.0) {
@@ -1092,25 +826,25 @@
         } else {
           setMorphTarget('Eye_Blink_L', 0, blinkMeshes);
           setMorphTarget('Eye_Blink_R', 0, blinkMeshes);
-          nextBlinkTime = now + 2.8 + Math.random() * 2.5;
+          nextBlinkTime = now + 2.8 + Math.random()*2.5;
         }
       }
 
       renderer.render(scene, camera);
 
-      // Anchor speech bubble tip right next to her mouth in 3D space
       if (speechBubble.classList.contains('visible')) {
         const mouthAnchor = new THREE.Vector3(0.09, 1.58, 0.06);
         mouthAnchor.project(camera);
-        const screenX = (mouthAnchor.x * 0.5 + 0.5) * window.innerWidth;
-        const screenY = (-mouthAnchor.y * 0.5 + 0.5) * window.innerHeight;
-        const clampedX = Math.min(window.innerWidth - speechBubble.offsetWidth - 16, Math.max(16, screenX + 14));
-        const clampedY = Math.min(window.innerHeight - 160, Math.max(16, screenY - 24));
+        const screenX = (mouthAnchor.x*0.5 + 0.5) * window.innerWidth;
+        const screenY = (-mouthAnchor.y*0.5 + 0.5) * window.innerHeight;
+        const bw = speechBubble.offsetWidth;
+        const bh = speechBubble.offsetHeight;
+        const clampedX = Math.min(window.innerWidth - bw - 16, Math.max(16, screenX + 14));
+        const clampedY = Math.min(window.innerHeight - bh - 16, Math.max(16, screenY - 24));
         speechBubble.style.left = `${clampedX}px`;
         speechBubble.style.top = `${clampedY}px`;
       }
     }
-
     animate();
 
     window.addEventListener('resize', () => {
